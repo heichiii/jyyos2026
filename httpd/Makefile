@@ -1,7 +1,7 @@
-NAME := $(shell basename $(PWD))
+NAME := $(notdir $(CURDIR))
 export MODULE := M7
 
-all: $(NAME)
+CFLAGS += -pthread
+LDLIBS += -pthread
 
 include ../oslab.mk
-include ../.shadow/oslab.mk
