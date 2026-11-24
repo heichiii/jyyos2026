@@ -1,6 +1,4 @@
-NAME := $(shell basename $(PWD))
+NAME := $(notdir $(CURDIR))
 export MODULE := M2
-all: $(NAME)
 
 include ../oslab.mk
-include ../.shadow/oslab.mk
