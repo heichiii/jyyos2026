@@ -5,4 +5,5 @@
 !*.h
 !*.md
 !Makefile
+!/oslab.mk
 !*.py
