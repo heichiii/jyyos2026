@@ -1,17 +1,15 @@
-NAME := $(shell basename $(PWD))
+NAME := $(notdir $(CURDIR))
 export MODULE := M9
 
-CFLAGS += -I.
-LIB_SRCS := $(shell find . -maxdepth 1 -name "*.c")
-TEST_SRCS := $(shell find tests/ -maxdepth 1 -name "*.c") ../testkit/testkit.c
+PROGRAM := $(NAME)_test
+BUILD_TARGETS := $(NAME).so $(PROGRAM)
+LIB_SRCS := $(wildcard *.c)
+TEST_SRCS := $(wildcard tests/*.c)
+TEST_DEPS := $(NAME).so
+LDLIBS += -L. -l:$(NAME).so -Wl,-rpath,'$$ORIGIN'
+CLEAN_FILES := $(NAME).so
 
-all: $(NAME).so $(NAME)_test
-
-$(NAME).so: $(LIB_SRCS) $(shell find . -name "*.h")
-	gcc $(CFLAGS) -fPIC -shared -o $(NAME).so $(LIB_SRCS)
-
-$(NAME)_test: $(TEST_SRCS) $(NAME).so $(shell find . -name "*.h")
-	gcc $(CFLAGS) -o $(NAME)_test $(TEST_SRCS) $(NAME).so
+$(NAME).so: $(LIB_SRCS) $(wildcard *.h) Makefile ../oslab.mk
+	$(CC) $(CPPFLAGS) $(CFLAGS) -fPIC -shared $(LIB_SRCS) -o $@ $(LDFLAGS)
 
 include ../oslab.mk
-include ../.shadow/oslab.mk
